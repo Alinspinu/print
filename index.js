@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const axios = require('axios')
@@ -14,8 +18,8 @@ const {sendToPrint} = require('./connectToPrinter')
 
 const auth = (req, res, next) => {
     const user = basicAuth(req);
-    const validUsername = '655e2e7c5a3d53943c6b7c53';
-    const validPassword = 'afara-ploua';
+    const validUsername = process.env.USERMANE
+    const validPassword = process.env.PASSWORD
     if (user && user.name === validUsername && user.pass === validPassword) {
       return next();
     }
