@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <align mode="center">
+    <text-line size="0:0">Ora: <%= time %> </text-line>
+  </align>
+  <line-feed/>
+  <align mode="center">
+    <text-line size="1:0"><%= inOrOut %></text-line>
+  </align>
+  <line-feed/>
+  <align mode="left">
+    <text-line size="1:0"><%= name %>   Masa <%= masa %></text-line>
+  </align>
+
+  <line-feed/>
+  <line-feed/>
+
+  <!-- Start of loop -->
+  <% for (let product of products) { %>
+    <align mode="left">
+      <text-line size="0:0"><%=product.qty%> X <%= product.name%></text-line>
+    </align>
+    <% if(product.toppings && product.toppings.length) { %>
+      <% for(let topping of product.toppings)  {%>
+    <align mode="left">
+      <text-line size="0:0"><%= "  " + " +"+topping.name%></text-line>
+    </align>
+    <% } %>
+      <% } %>
+    <% if(product.comment && product.comment.length) { %>
+      <align mode="left">
+        <text-line size="0:0"><%="  " + " -" +product.comment%></text-line>
+      </align>
+      <% } %>
+    <line-feed/>
+    <% } %>
+  <!-- End of loop -->
+  <paper-cut></paper-cut>
+</document>

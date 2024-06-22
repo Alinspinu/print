@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <align mode="center">
+    <text-line size="0:0">Ora: 16:05 </text-line>
+  </align>
+  <line-feed/>
+  <align mode="center">
+    <text-line size="1:0">INTERIOR</text-line>
+  </align>
+  <line-feed/>
+  <align mode="left">
+    <text-line size="1:0">Alin Spinu   Masa 43</text-line>
+  </align>
+
+  <line-feed/>
+  <line-feed/>
+
+  <!-- Start of loop -->
+  
+    <align mode="left">
+      <text-line size="0:0">1 X Snițel de vită cu cartofi prăjiți și sos de creveți cu prosecco</text-line>
+    </align>
+    
+    
+    <line-feed/>
+    
+    <align mode="left">
+      <text-line size="0:0">1 X Platou Mix</text-line>
+    </align>
+    
+    
+    <line-feed/>
+    
+    <align mode="left">
+      <text-line size="0:0">1 X Mister Muscle</text-line>
+    </align>
+    
+    
+    <line-feed/>
+    
+  <!-- End of loop -->
+  <paper-cut></paper-cut>
+</document>
