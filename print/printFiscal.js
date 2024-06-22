@@ -105,11 +105,6 @@ async function printBill(bill) {
 
 
 
-
-
-
-
-
 async function printNefiscal(bill) {
     let data = [
         `TL^           NOTA DE PLATA NEFISCALA    `,

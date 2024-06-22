@@ -45,8 +45,8 @@ const connectToPrinter = (host, port, buffer, timeout = 5000) => {
 async function sendToPrint(print){
     console.log(print)
     try {
-        const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: 5000})
-        console.log('response fron bottom', response.request)
+        // const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: 5000})
+        // console.log('response fron bottom', response.request)
         return { message: 'Operatiune efecuata cu success' };
   } catch (error) {
     if (error.response) {
@@ -64,35 +64,6 @@ async function sendToPrint(print){
 
 
 
-function handleTunnelErrors(tunnel) {
-  tunnel.on('error', (err) => {
-    console.error('Tunnel error:', err);
-    if (err.code === 'ECONNREFUSED') {
-      console.error('Connection refused. Check if the service is running and accessible.');
-    } else if (err.code === 'ECONNRESET') {
-      console.error('Connection reset by peer.');
-    } else if (err.code === 'ENOTFOUND') {
-      console.error('Unable to resolve local tunnel service. Check your internet connection.');
-    } else if (err.code === 'ETIMEDOUT') {
-      console.error('Connection timed out. The service might be down or unreachable.');
-    } else {
-      console.error('Unknown error:', err);
-    }
-  });
-
-  tunnel.on('close', () => {
-    console.log('Tunnel closed');
-  });
-
-  process.on('SIGINT', () => {
-    if (tunnel) {
-      tunnel.close();
-      console.log('Tunnel closed on app termination');
-    }
-    process.exit();
-  });
-}
-
 
 class PrinterConnectionError extends Error {
     constructor(message, host, port, timeout) {
@@ -109,4 +80,4 @@ class PrinterConnectionError extends Error {
 
 
 
-module.exports = {connectToPrinter, sendToPrint, handleTunnelErrors}
+module.exports = {connectToPrinter, sendToPrint}

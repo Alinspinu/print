@@ -10,7 +10,7 @@ const https = require('https');
 const {printBill, posPayment, reports, inAndOut, printNefiscal} = require('./print/printFiscal')
 const {printOrders} = require('./print/printOrders')
 
-const {handleTunnelErrors} = require('./connectToPrinter')
+const {sendToPrint} = require('./connectToPrinter')
 
 const auth = (req, res, next) => {
     const user = basicAuth(req);
@@ -28,6 +28,7 @@ const auth = (req, res, next) => {
   app.use(cors())
   app.use('/print', auth);
   app.use('/orders', auth);
+
 
 
   app.post('/print', async (req, res) => {
@@ -49,13 +50,12 @@ const auth = (req, res, next) => {
             }
         }  
         if(rep){
-            console.log(rep)
             const response = await reports(rep)
             console.log('top reports', response)
             return res.status(200).json(response)
         } 
         if(inOut){
-            const response = await inAndOut(inOut)
+            const response = await inAndOut(inOut.mode, inOut.sum)
             console.log('top inOut', response)
             return  res.status(200).json(response)
         }
@@ -177,19 +177,12 @@ const auth = (req, res, next) => {
   })
   
 
-
-
 const port = 8081
 app.listen(port, async () => {
     console.log(`Server running on port ${port}`);
-    // try {
-    //     const tunnel = await localtunnel({ port: port, subdomain: 'print-orders-true' });
-    //     console.log(`Tunnel running at: ${tunnel.url}`);
-    //     handleTunnelErrors(tunnel); // Call the error handling function
-    //   } catch (err) {
-    //     console.error('Failed to establish tunnel:', err);
-    //   }
+    try{
+        await sendToPrint(['TL^ Imprimanta functionala!'])
+    } catch(error){
+       console.error('Nu se poate conecta la imprimanta!!!!!!')
+    }
   });
-
-
-  
