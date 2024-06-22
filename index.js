@@ -18,8 +18,10 @@ const {sendToPrint} = require('./connectToPrinter')
 
 const auth = (req, res, next) => {
     const user = basicAuth(req);
-    const validUsername = process.env.USERMANE
+    // console.log(req)
+    const validUsername = process.env.USERNAME
     const validPassword = process.env.PASSWORD
+    console.log(validPassword, validUsername)
     if (user && user.name === validUsername && user.pass === validPassword) {
       return next();
     }
