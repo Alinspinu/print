@@ -17,7 +17,7 @@ const outputPath = './print//output.xml';
 
 
 async function printOrders(order) {
-    console.log(order)
+    // console.log(order)
     let foodProd = []
     let mainProd = []
     let baristaProd = []
@@ -228,8 +228,8 @@ async function createXml(data) {
           }
           console.log('XML file created successfully.');
           try {
-            const response = await testPrint(); // Assuming testPrint() returns a promise
-            resolve(response); // Resolve the promise with the response from testPrint()
+            // const response = await testPrint();
+            // resolve(response);
           } catch (err) {
             console.error('Error printing:', err);
             reject(err); // Reject the promise if testPrint() encounters an error

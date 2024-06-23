@@ -7,9 +7,11 @@ const app = express();
 const axios = require('axios')
 const basicAuth = require('basic-auth')
 const bodyParser = require('body-parser')
-const localtunnel = require('localtunnel')
 const cors = require('cors');
 const https = require('https');
+
+const io = require('socket.io-client')
+const socket = io("https://live669-0bac3349fa62.herokuapp.com")
 
 const {printBill, posPayment, reports, inAndOut, printNefiscal} = require('./print/printFiscal')
 const {printOrders} = require('./print/printOrders')
@@ -18,9 +20,8 @@ const {sendToPrint} = require('./connectToPrinter')
 
 const auth = (req, res, next) => {
     const user = basicAuth(req);
-    // console.log(req)
-    const validUsername = process.env.USERNAME
-    const validPassword = process.env.PASSWORD
+    const validUsername = process.env.API_USER
+    const validPassword = process.env.API_PASSWORD
     console.log(validPassword, validUsername)
     if (user && user.name === validUsername && user.pass === validPassword) {
       return next();
@@ -29,6 +30,36 @@ const auth = (req, res, next) => {
     res.set('WWW-Authenticate', 'Basic realm="example"');
     return res.status(401).json({message:'Authentication required.'});
   };
+
+
+
+socket.on('connect', () => {
+    console.log('Connected to Waiters server');
+});
+
+
+  socket.on('printOrder', async (doc) => {
+    try {
+        const parsedOrder = JSON.parse(doc)
+        const processedDoc = await printOrders(parsedOrder) 
+        socket.emit('orderProcessed', processedDoc);
+    } catch (error) {
+        console.error('Error processing document:', error);
+        socket.emit('orderProcessed', { error: 'Failed to process document' });
+    }
+});
+
+  socket.on('printBill', async (doc) => {
+    try {
+        const parsedBill = JSON.parse(doc)
+        const processedDoc = await printBill(parsedBill) 
+        socket.emit('billProcessed', processedDoc);
+    } catch (error) {
+        console.error('Error processing document:', error);
+        socket.emit('billProcessed', { error: 'Failed to process document' });
+    }
+});
+
 
   app.use(bodyParser.json());
   app.use(cors())
@@ -98,7 +129,9 @@ const auth = (req, res, next) => {
   })
 
 
-
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
   async function makeRequestWithRetry(url, expectedCondition, retries, delayTime) {
     const agent = new https.Agent({
@@ -106,7 +139,7 @@ const auth = (req, res, next) => {
       });
     for (let attempt = 0; attempt < retries; attempt++) {
         try {
-            const response = await axios.get(url, {headers: {'Content-Type': 'application/json'},httpsAgent: agent, timeout: 10000});
+            const response = await axios.get(url, {headers: {'Content-Type': 'application/json'},httpsAgent: agent});
             if (expectedCondition(response)) {
                 return response;
             }
@@ -132,7 +165,7 @@ const auth = (req, res, next) => {
             const baseUrl = `https://${ip}:${port}/pos/v1/`
             if(abort === 'abort'){
                 const abortUrl = `${baseUrl}abort`
-                axios.post(abortUrl, {"sessionId": `${sessionId}`}, {headers: {'Content-Type': 'application/json'},httpsAgent: agent, timeout: 3000})
+                axios.post(abortUrl, {"sessionId": `${sessionId}`}, {headers: {'Content-Type': 'application/json'},httpsAgent: agent})
                 .then(response => {
                     console.log('Abort succesful', response.data);
                     res.status(200).json(response.data)
@@ -149,8 +182,7 @@ const auth = (req, res, next) => {
                         "sessionId": `${sessionId}`,
                         "amount": amount*100,
                     }
-                    console.log(urlSearchPos)
-                    axios.post(urlSearchPos, body, {headers: {'Content-Type': 'application/json'},httpsAgent: agent, timeout: 10000})
+                    axios.post(urlSearchPos, body, {headers: {'Content-Type': 'application/json'},httpsAgent: agent})
                         .then(response => {
                             console.log('First request successful:', response.data);
                     

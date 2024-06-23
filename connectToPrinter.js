@@ -41,11 +41,10 @@ const connectToPrinter = (host, port, buffer, timeout = 5000) => {
 
 
 
-
-async function sendToPrint(print){
-    console.log(print)
+async function sendToPrint(print, time = 5000){
+    console.log(print, time)
     try {
-        // const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: 5000})
+        // const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: time})
         // console.log('response fron bottom', response.request)
         return { message: 'Operatiune efecuata cu success' };
   } catch (error) {

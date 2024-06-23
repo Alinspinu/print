@@ -146,7 +146,7 @@ async function printNefiscal(bill) {
 async function posPayment(sum){
     let posLine = [`POS^${sum * 100}`]
     try {
-        const response = await sendToPrint(posLine)
+        const response = await sendToPrint(posLine, 20000)
         if(response){
             console.log(response.data)
             return response.data
