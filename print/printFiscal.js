@@ -21,7 +21,7 @@ async function printBill(bill) {
                 tva = 4
             }
             if(el.tva === 0){
-                tva = 3
+                tva = 5
             }
             if(el.quantity === 0){
                 qty = 1
@@ -62,11 +62,6 @@ async function printBill(bill) {
             let discountLine = `DV^${bill.cashBack * 100}`
             billToPrint.push(discountLine)
         }
-        if(bill.voucher > 0) {
-            billToPrint.push("ST^")
-            let voucherLine = `DV^${bill.voucher * 100}`
-            billToPrint.push(voucherLine)
-        }
         billToPrint.push("ST^")
         if(bill.payment.card){
             let cardLine = `P^2^${bill.payment.card * 100}`
@@ -76,17 +71,12 @@ async function printBill(bill) {
             let cashLine = `P^1^${bill.payment.cash * 100}`
             billToPrint.push(cashLine)
         }
-        if(bill.payment.viva) {
-            let cardLine = `P^7^${bill.payment.viva * 100}`
-            billToPrint.push(cardLine)
-        }
         if(bill.payment.online) {
-            let onlineLine = `P^7^${bill.payment.online * 100}`
+            let onlineLine = `P^3^${bill.payment.online * 100}`
             billToPrint.push(onlineLine)
         }
         try {
             if(bill.total > 0) {
-                console.log('hit before print function')
                 const response = await sendToPrint(billToPrint)
                 if(response){
                     return {message: 'Bonul fiscal a fost tiparit!'}
@@ -101,44 +91,6 @@ async function printBill(bill) {
         return
     }
 }
-
-
-
-async function printNefiscal(bill) {
-    let data = [
-        `TL^           NOTA DE PLATA NEFISCALA    `,
-        "TL^ ", 
-        `TL^SE ELIBEREAZA CA NOTA INFORMATIVA`,
-        "TL^", 
-    ];
-    if(bill.products.length){
-        for(let pro of bill.products){
-            let entry = `TL^  ${pro.name} --- ${pro.price} X ${pro.quantity} === ${pro.total} Lei`
-            data.push(entry)
-        }
-        console.log(bill)
-        let totalProductsLine = `TL^ Total Produse    ${bill.total + bill.discount + bill.cashBack} Lei`
-        data.push(totalProductsLine)
-        let discountLine = `TL^ Discount    ${bill.discount} Lei`
-        data.push(discountLine)
-        let totalLine = `TL^ TOTAL        ${bill.total} Lei`
-        let thanks = `TL^MULTUMIM SI VA MAI ASTEPTAM!`
-        data.push(totalLine)
-        try {
-            const response = await sendToPrint(data)
-            if(response){
-                console.log(response.data)
-                return {message: 'Nota de plata a fost tiparita'}
-            } 
-      } catch (error) {
-            console.log('nefiscal error')
-            throw error
-      }
-    } else {
-        return
-    }
-}
-
 
 
 
@@ -206,5 +158,5 @@ async function inAndOut(mode, sum){
 
 
 
-module.exports = {printBill, posPayment, reports, inAndOut, printNefiscal}
+module.exports = {printBill, posPayment, reports, inAndOut}
 
