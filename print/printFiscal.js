@@ -76,7 +76,7 @@ async function printBill(bill) {
             billToPrint.push(onlineLine)
         }
         try {
-            if(bill.total > 0) {
+            if(bill.total > 0 && !bill.dont) {
                 const response = await sendToPrint(billToPrint)
                 if(response){
                     return {message: 'Bonul fiscal a fost tiparit!'}

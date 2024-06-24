@@ -1,6 +1,6 @@
 const net = require("net")
 const axios = require('axios')
-const url = 'http://192.168.1.90:65400/api/Receipt';
+const url = 'http://192.168.100.7:65400/api/Receipt';
 
 
 
@@ -8,8 +8,7 @@ const url = 'http://192.168.1.90:65400/api/Receipt';
 
 async function sendToPrint(print, time = 15000){
     try {
-        // const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: time})
-        // console.log('response fron bottom', response.request)
+        const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: time})
         return { message: 'Operatiune efecuata cu success' };
   } catch (error) {
     if (error.response) {
