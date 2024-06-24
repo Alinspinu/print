@@ -41,8 +41,7 @@ const connectToPrinter = (host, port, buffer, timeout = 5000) => {
 
 
 
-async function sendToPrint(print, time = 5000){
-    console.log(print, time)
+async function sendToPrint(print, time = 15000){
     try {
         // const response = await axios.post(url, print, {headers: {'Content-Type': 'application/json'}, timeout: time})
         // console.log('response fron bottom', response.request)

@@ -89,7 +89,6 @@ async function printBill(bill) {
                 console.log('hit before print function')
                 const response = await sendToPrint(billToPrint)
                 if(response){
-                    console.log(response)
                     return {message: 'Bonul fiscal a fost tiparit!'}
                 }
             } else{

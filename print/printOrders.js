@@ -17,7 +17,7 @@ const outputPath = './print//output.xml';
 
 
 async function printOrders(order) {
-    // console.log(order)
+    console.log(order)
     let foodProd = []
     let mainProd = []
     let baristaProd = []
