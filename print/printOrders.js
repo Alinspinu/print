@@ -70,24 +70,26 @@ async function printOrders(order) {
 
     socket.emit('outsideOrder', JSON.stringify({outProducts, dataToPrint}))
     try{
+        let responses = []
         if(foodProd.length){
             const bucResponse = await printKitchen(foodProd, dataToPrint);
             if(bucResponse){
-                return bucResponse
+                responses.push(bucResponse)
             }
         }
         if(baristaProd.length){
             const baristaResponse = await printBarista(baristaProd, dataToPrint);
             if(baristaResponse){
-                return baristaResponse
+                responses.push(baristaResponse)
             }
         }
         if(mainProd.length){
               const mainResponse = await printMain(mainProd, dataToPrint)
               if(mainResponse){
-                return mainResponse
+                responses.push(mainResponse)
               }
         }
+        return responses[0]
     } catch(error){
         console.log('an error ocured 2')
         throw error

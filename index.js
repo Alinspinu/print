@@ -22,7 +22,7 @@ const auth = (req, res, next) => {
     const user = basicAuth(req);
     const validUsername = process.env.API_USER
     const validPassword = process.env.API_PASSWORD
-    console.log(validPassword, validUsername)
+    
     if (user && user.name === validUsername && user.pass === validPassword) {
       return next();
     }
@@ -218,9 +218,4 @@ socket.on('connect', () => {
 const port = 8081
 app.listen(port, async () => {
     console.log(`Server running on port ${port}`);
-    try{
-        await sendToPrint(['TL^ Imprimanta functionala!'])
-    } catch(error){
-       console.error('Nu se poate conecta la imprimanta!!!!!!')
-    }
   });
